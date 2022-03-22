@@ -1,5 +1,5 @@
-import strategy.simuduck.SimUDuckRunner
+import observer.monitoring.MonitoringRunner
 
 fun main(args: Array<String>) {
-    SimUDuckRunner().run()
+    MonitoringRunner().run()
 }
