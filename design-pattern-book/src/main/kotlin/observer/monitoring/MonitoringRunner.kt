@@ -20,5 +20,6 @@ class MonitoringRunner {
         weatherData.setMeasurement(80f, 65f, 30.4f)
         weatherData.setMeasurement(82f, 70f, 29.2f)
         weatherData.setMeasurement(78f, 90f, 29.5f)
+
     }
 }
