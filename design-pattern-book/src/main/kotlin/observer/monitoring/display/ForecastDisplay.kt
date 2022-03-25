@@ -6,7 +6,7 @@ import observer.monitoring.WeatherData
 /**
  * Created by marathoner on 2022/03/22
  */
-class ForecastDisplay(weatherData: WeatherData) : Observer, DisplayElement {
+class ForecastDisplay(private val weatherData: WeatherData) : Observer, DisplayElement {
     private var temperature: Float = 0.0f
     private var humidity: Float = 0.0f
     private var pressure: Float = 0.0f
@@ -24,10 +24,10 @@ class ForecastDisplay(weatherData: WeatherData) : Observer, DisplayElement {
             println("기상 예보: 지금과 비슷할 것 같습니다.")
     }
 
-    override fun update(temp: Float, humidity: Float, pressure: Float) {
-        this.temperature = temp
-        this.humidity = humidity
-        this.pressure = pressure
+    override fun update() {
+        this.temperature = weatherData.getTemperature()
+        this.humidity = weatherData.getHumidity()
+        this.pressure = weatherData.getPressure()
         display()
     }
 

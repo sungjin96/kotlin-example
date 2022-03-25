@@ -14,7 +14,7 @@ class WeatherData : Subject {
     fun getHumidity(): Float = humidity
     fun getPressure(): Float = pressure
 
-    fun measurementsChanged() {
+    private fun measurementsChanged() {
         notifyObservers()
     }
 
@@ -35,7 +35,7 @@ class WeatherData : Subject {
 
     override fun notifyObservers() {
         for (observer in observers) {
-            observer.update(temperature, humidity, pressure)
+            observer.update()
         }
     }
 

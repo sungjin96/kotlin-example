@@ -6,7 +6,7 @@ import observer.monitoring.WeatherData
 /**
  * Created by marathoner on 2022/03/22
  */
-class HeatIndexDisplay(weatherData: WeatherData) : Observer, DisplayElement {
+class HeatIndexDisplay(val weatherData: WeatherData) : Observer, DisplayElement {
     private var temperature: Float = 0.0f
     private var humidity: Float = 0.0f
 
@@ -18,9 +18,9 @@ class HeatIndexDisplay(weatherData: WeatherData) : Observer, DisplayElement {
         println("체감 온도: ${computeHeatIndex(temperature, humidity)}")
     }
 
-    override fun update(temp: Float, humidity: Float, pressure: Float) {
-        this.temperature = temp
-        this.humidity = humidity
+    override fun update() {
+        this.temperature = weatherData.getTemperature()
+        this.humidity = weatherData.getHumidity()
         display()
     }
 

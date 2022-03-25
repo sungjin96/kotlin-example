@@ -6,7 +6,7 @@ import observer.monitoring.WeatherData
 /**
  * Created by marathoner on 2022/03/22
  */
-class CurrentConditionsDisplay(weatherData: WeatherData) : Observer, DisplayElement {
+class CurrentConditionsDisplay(private val weatherData: WeatherData) : Observer, DisplayElement {
     private var temperature: Float = 0.0f
     private var humidity: Float = 0.0f
 
@@ -18,9 +18,9 @@ class CurrentConditionsDisplay(weatherData: WeatherData) : Observer, DisplayElem
         println("현재 상태: 온도 ${temperature}F, 습도 ${humidity}%")
     }
 
-    override fun update(temp: Float, humidity: Float, pressure: Float) {
-        this.temperature = temp
-        this.humidity = humidity
+    override fun update() {
+        this.temperature = weatherData.getTemperature()
+        this.humidity = weatherData.getHumidity()
         display()
     }
 

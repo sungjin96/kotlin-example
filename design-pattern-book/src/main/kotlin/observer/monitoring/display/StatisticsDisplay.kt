@@ -6,7 +6,7 @@ import observer.monitoring.WeatherData
 /**
  * Created by marathoner on 2022/03/22
  */
-class StatisticsDisplay(weatherData: WeatherData) : Observer, DisplayElement {
+class StatisticsDisplay(val weatherData: WeatherData) : Observer, DisplayElement {
     private var temperature: Float = 0.0f
 
     init {
@@ -17,8 +17,8 @@ class StatisticsDisplay(weatherData: WeatherData) : Observer, DisplayElement {
         println("평균/최고/최저 온도 = ${temperature}F")
     }
 
-    override fun update(temp: Float, humidity: Float, pressure: Float) {
-        this.temperature = temp
+    override fun update() {
+        this.temperature = weatherData.getTemperature()
         display()
     }
 
