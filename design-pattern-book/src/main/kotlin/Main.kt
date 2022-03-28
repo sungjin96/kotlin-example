@@ -1,5 +1,5 @@
-import observer.monitoring.MonitoringRunner
+import decorator.coffe.CoffeeRunner
 
 fun main(args: Array<String>) {
-    MonitoringRunner().run()
+    CoffeeRunner().run()
 }
