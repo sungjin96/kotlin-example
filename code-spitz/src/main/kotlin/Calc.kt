@@ -1,26 +1,37 @@
 /**
  * Created by marathoner on 2022/06/22
  */
-class Calc {
-}
+class Calc(var value: String) {
 
-val trim = """[^.\d-+*/]""".toRegex()
-val groupMD = """((?:\+|\+-)?[.\d]+)([*/])((?:\+|\+-|)[.\d]+)""".toRegex()
+    val number = """([+-]?[.\d]+)"""
+    val trim = """[^.\d-+*/()]""".toRegex()
+    val groupMD = """$number([*/])$number""".toRegex()
+    val plus = number.toRegex()
+    val bracket = """\(([^)]+)\)""".toRegex()
 
-// 공백 제거
-fun trim(v: String): String = v.replace(trim, "")
-// - 를 +- 로 변경
-fun repMtoPM(v: String): String = v.replace("-", "+-")
-
-fun foldGroup(v: String): Double = groupMD.findAll(v).fold(0.0) { acc, curr ->
-    val (_, left, op, right) = curr.groupValues
-    val leftValue = left.replace("+", "").toDouble()
-    val rightValue = right.replace("+", "").toDouble()
-    val result = when (op) {
-        "*" -> leftValue * rightValue
-        "/" -> leftValue / rightValue
-        else -> throw Throwable("invalid operator &op")
+    fun reduceBracket(v: String): String {
+        var str = v.replace(trim, "")
+        while (bracket.containsMatchIn(str)) str = str.replace(bracket) { "${calc(it.groupValues[1])}" }
+        return str
     }
 
-    acc + result
+    fun calc(v: String): Double {
+        var str = reduceBracket(value)
+        while (groupMD.containsMatchIn(str)) {
+            str = str.replace(groupMD) {
+                val (_, left, op, right) = it.groupValues
+                val leftValue = left.toDouble()
+                val rightValue = right.toDouble()
+                "${
+                    when (op) {
+                        "*" -> leftValue * rightValue
+                        "/" -> leftValue / rightValue
+                        else -> throw Throwable("invalid operator $op")
+                    }
+                }"
+            }
+        }
+        return plus.findAll(str).fold(0.0) { acc, curr -> acc + curr.groupValues[1].toDouble() }
+    }
 }
+
