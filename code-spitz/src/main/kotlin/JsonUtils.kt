@@ -3,16 +3,29 @@ import kotlin.reflect.KProperty
 /**
  * Created by marathoner on 2022/06/24
  */
-fun <T : Any> stringify(target: T): String {
-    val builder = StringBuilder()
-    builder.append("{")
-    target::class.members.filterIsInstance<KProperty<*>>().forEach {
-        builder.append(it.name, ":")
-        val value = it.getter.call(target)
-        builder.append(value, ',')
-    }
-    builder.append("}")
-    return "$builder"
+fun stringify(value: Any?): String = when (value) {
+    null -> "null"
+    is String -> jsonString(value)
+    is Boolean, is Number -> "$value"
+    is List<*> -> jsonList(value)
+    else -> jsonObject(value)
 }
 
-class Json0(val a:Int, val b: String)
+private fun <T : Any> jsonObject(target: T): String {
+    val builder = StringBuilder()
+    return target::class.members
+        .filterIsInstance<KProperty<*>>()
+        .joinTo(builder, ",", "{", "}") {
+            "${stringify(it.name)}:${stringify(it.getter.call(target))}"
+        }.toString()
+}
+
+private fun jsonList(target: List<*>): String {
+    val builder = StringBuilder()
+    return target.joinTo(builder, ",", "[", "]", transform = ::stringify).toString()
+
+}
+
+private fun jsonString(v: String): String = """"${v.replace("\"", "\\\"")}""""
+
+class Json0(val a: Int, val b: String)
