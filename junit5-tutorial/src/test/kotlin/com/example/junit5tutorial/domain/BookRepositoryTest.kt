@@ -1,9 +1,12 @@
 package com.example.junit5tutorial.domain
 
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
+import com.example.junit5tutorial.web.dto.BookCreateRequestDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+
+import org.assertj.core.api.Assertions.*
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
 /**
  * Created by marathoner on 2022/08/23
@@ -13,6 +16,17 @@ internal class BookRepositoryTest @Autowired constructor(private val bookReposit
 
     @Test
     fun `책등록_TEST`() {
-        println("책등록 테스트 실행")
+        // given (데이터 준비)
+        val title = "junit5";
+        val author = "test";
+        val book = BookCreateRequestDto(title, author).toEntity()
+
+        // when (테스트 실행)
+        val result = bookRepository.save(book)
+
+        // then (검증)
+        assertThat(result).isNotNull
+        assertThat(result.title).isGreaterThanOrEqualTo(book.title)
+        assertThat(result.author).isGreaterThanOrEqualTo(book.author)
     }
 }
