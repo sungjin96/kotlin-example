@@ -58,6 +58,18 @@ internal class BookRepositoryTest @Autowired constructor(private val bookReposit
         assertThat(findBook.author).isGreaterThanOrEqualTo(book.author)
     }
 
+    @Test
+    fun `should 책 삭제`() {
+        // given
+        val (_, newBook) = saveBook()
+
+        // when
+        bookRepository.deleteById(newBook.id)
+
+        // then
+        assertThat(bookRepository.findById(newBook.id).isPresent).isEqualTo(true)
+    }
+
     fun saveBook(): Pair<Book, Book> {
         val title = "junit5";
         val author = "test";
