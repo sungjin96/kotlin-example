@@ -75,7 +75,7 @@ internal class BookRepositoryTest @Autowired constructor(private val bookReposit
     fun `should 책 수정`() {
         // given
         val (_, newBook) = saveBook()
-        val updateBookDto = BookUpdateRequestDto(newBook.id, "title", "author")
+        val updateBookDto = BookUpdateRequestDto("title", "author")
 
         // when
         newBook.update(updateBookDto)

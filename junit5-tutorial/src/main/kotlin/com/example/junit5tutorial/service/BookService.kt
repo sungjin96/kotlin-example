@@ -5,6 +5,7 @@ import com.example.junit5tutorial.web.dto.BookCreateRequestDto
 import com.example.junit5tutorial.web.dto.BookResponseDto
 import com.example.junit5tutorial.web.dto.BookUpdateRequestDto
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
 import javax.persistence.EntityNotFoundException
 
@@ -30,12 +31,14 @@ class BookService(private val bookRepository: BookRepository) {
         return BookResponseDto.from(findBook)
     }
 
-    fun update(bookDto: BookUpdateRequestDto) {
-        bookRepository.findById(bookDto.id)
-            .orElseThrow { EntityNotFoundException("Not Found Entity By id ( ${bookDto.id} )") }
+    @Transactional(rollbackFor = [EntityNotFoundException::class])
+    fun update(id: UUID, bookDto: BookUpdateRequestDto) {
+        bookRepository.findById(id)
+            .orElseThrow { EntityNotFoundException("Not Found Entity By id ( $id )") }
             .update(bookDto)
     }
 
+    @Transactional(rollbackFor = [RuntimeException::class])
     fun delete(id: UUID) {
         bookRepository.deleteById(id)
     }
