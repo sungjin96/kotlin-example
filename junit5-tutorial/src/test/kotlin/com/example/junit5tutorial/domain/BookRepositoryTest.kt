@@ -1,6 +1,7 @@
 package com.example.junit5tutorial.domain
 
 import com.example.junit5tutorial.web.dto.BookCreateRequestDto
+import com.example.junit5tutorial.web.dto.BookUpdateRequestDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 
@@ -68,6 +69,22 @@ internal class BookRepositoryTest @Autowired constructor(private val bookReposit
 
         // then
         assertThat(bookRepository.findById(newBook.id).isPresent).isEqualTo(true)
+    }
+
+    @Test
+    fun `should 책 수정`() {
+        // given
+        val (_, newBook) = saveBook()
+        val updateBookDto = BookUpdateRequestDto(newBook.id, "title", "author")
+
+        // when
+        newBook.update(updateBookDto)
+
+        // then
+        val findBook = bookRepository.findById(newBook.id).get()
+        assertThat(findBook.title).isGreaterThanOrEqualTo("title")
+        assertThat(findBook.author).isGreaterThanOrEqualTo("author")
+
     }
 
     fun saveBook(): Pair<Book, Book> {
