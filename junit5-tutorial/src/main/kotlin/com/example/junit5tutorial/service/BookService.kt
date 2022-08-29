@@ -1,6 +1,7 @@
 package com.example.junit5tutorial.service
 
 import com.example.junit5tutorial.domain.BookRepository
+import com.example.junit5tutorial.util.MailSender
 import com.example.junit5tutorial.web.dto.BookCreateRequestDto
 import com.example.junit5tutorial.web.dto.BookResponseDto
 import com.example.junit5tutorial.web.dto.BookUpdateRequestDto
@@ -13,10 +14,12 @@ import javax.persistence.EntityNotFoundException
  * Created by marathoner on 2022/08/23
  */
 @Service
-class BookService(private val bookRepository: BookRepository) {
+class BookService(private val bookRepository: BookRepository, private val mailSender: MailSender) {
 
-    fun createNewBook(bookDto: BookCreateRequestDto): BookResponseDto {
+    @Transactional(rollbackFor = [RuntimeException::class])
+    fun create(bookDto: BookCreateRequestDto): BookResponseDto {
         val newBook = bookRepository.save(bookDto.toEntity())
+        newBook.let { if (mailSender.send().not()) throw RuntimeException("메일이 전송되지 않았습니다.") }
         return BookResponseDto.from(newBook)
     }
 
