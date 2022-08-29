@@ -1,20 +1,29 @@
 package com.example.junit5tutorial.service
 
 import com.example.junit5tutorial.domain.BookRepository
-import com.example.junit5tutorial.util.MailSenderStub
+import com.example.junit5tutorial.util.MailSender
 import com.example.junit5tutorial.web.dto.BookCreateRequestDto
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers.any
+import org.mockito.InjectMocks
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.junit.jupiter.MockitoExtension
 
 /**
  * Created by marathoner on 2022/08/23
  */
-@DataJpaTest
-internal class BookServiceTest @Autowired constructor(
-    private val bookRepository: BookRepository,
-) {
+@ExtendWith(MockitoExtension::class)
+internal class BookServiceTest {
+
+    @InjectMocks
+    private lateinit var bookService: BookService
+    @Mock
+    private lateinit var bookRepository: BookRepository
+    @Mock
+    private lateinit var mailSender: MailSender
 
     @Test
     fun `should 책 등록하기 테스트`() {
@@ -22,14 +31,14 @@ internal class BookServiceTest @Autowired constructor(
         val bookDto = BookCreateRequestDto("Title", "Author")
 
         // stub
-        val mailSenderStub = MailSenderStub()
+        Mockito.`when`(bookRepository.save(any())).thenReturn(bookDto.toEntity())
+        Mockito.`when`(mailSender.send()).thenReturn(true)
 
         // when
-        val bookService = BookService(bookRepository, mailSenderStub)
         val newBook = bookService.create(bookDto)
 
         // then
-        assertThat(newBook.title).isGreaterThanOrEqualTo(bookDto.title)
-        assertThat(newBook.author).isGreaterThanOrEqualTo(bookDto.author)
+        assertThat(bookDto.title).isEqualTo(newBook.title)
+        assertThat(bookDto.author).isEqualTo(newBook.author)
     }
 }

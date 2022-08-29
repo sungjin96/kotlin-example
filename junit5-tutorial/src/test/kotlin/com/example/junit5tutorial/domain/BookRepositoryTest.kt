@@ -28,8 +28,8 @@ internal class BookRepositoryTest @Autowired constructor(private val bookReposit
 
         // then (검증)
         assertThat(newBook).isNotNull
-        assertThat(newBook.title).isGreaterThanOrEqualTo(book.title)
-        assertThat(newBook.author).isGreaterThanOrEqualTo(book.author)
+        assertThat(book.title).isEqualTo(newBook.title)
+        assertThat(book.author).isEqualTo(newBook.author)
     }
 
     @Test
@@ -41,8 +41,8 @@ internal class BookRepositoryTest @Autowired constructor(private val bookReposit
         val books = bookRepository.findAll()
 
         // then
-        assertThat(books[0].title).isGreaterThanOrEqualTo(book.title)
-        assertThat(books[0].author).isGreaterThanOrEqualTo(book.author)
+        assertThat(book.title).isEqualTo(books[0].title)
+        assertThat(book.author).isEqualTo(books[0].author)
 
     }
 
@@ -55,8 +55,8 @@ internal class BookRepositoryTest @Autowired constructor(private val bookReposit
         val findBook = bookRepository.findById(newBook.id).get()
 
         // then
-        assertThat(findBook.title).isGreaterThanOrEqualTo(book.title)
-        assertThat(findBook.author).isGreaterThanOrEqualTo(book.author)
+        assertThat(book.title).isEqualTo(findBook.title)
+        assertThat(book.author).isEqualTo(findBook.author)
     }
 
     @Test
@@ -68,7 +68,7 @@ internal class BookRepositoryTest @Autowired constructor(private val bookReposit
         bookRepository.deleteById(newBook.id)
 
         // then
-        assertThat(bookRepository.findById(newBook.id).isPresent).isEqualTo(true)
+        assertThat(true).isEqualTo(bookRepository.findById(newBook.id).isPresent)
     }
 
     @Test
@@ -82,8 +82,8 @@ internal class BookRepositoryTest @Autowired constructor(private val bookReposit
 
         // then
         val findBook = bookRepository.findById(newBook.id).get()
-        assertThat(findBook.title).isGreaterThanOrEqualTo("title")
-        assertThat(findBook.author).isGreaterThanOrEqualTo("author")
+        assertThat(updateBookDto.title).isEqualTo(findBook.title)
+        assertThat(updateBookDto.author).isEqualTo(findBook.author)
 
     }
 
