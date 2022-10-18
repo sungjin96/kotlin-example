@@ -10,10 +10,10 @@ import javax.validation.constraints.Size
 class BookCreateRequestDto(
     @field:NotBlank
     @field:Size(min = 1, max = 50)
-    var title: String,
+    var title: String = "",
     @field:NotBlank
     @field:Size(min = 1, max = 20)
-    var author: String,
+    var author: String = "",
 ) {
     fun toEntity(): Book {
         return Book(title, author)
