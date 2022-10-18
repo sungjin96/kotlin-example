@@ -7,12 +7,8 @@ import com.example.junit5tutorial.web.dto.BookUpdateRequestDto
 import com.example.junit5tutorial.web.dto.CommonResponseDto
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.validation.FieldError
-import org.springframework.validation.ObjectError
-import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.*
 import java.util.*
-import java.util.function.Consumer
 import javax.validation.Valid
 
 
@@ -40,10 +36,10 @@ class BookApiController(private val bookService: BookService) {
         ResponseEntity.status(HttpStatus.OK).body(bookService.findById(id))
 
     @DeleteMapping("/{id}")
-    fun deleteBook(@PathVariable id: UUID) =
+    fun deleteBook(@PathVariable id: UUID): ResponseEntity<Unit> =
         ResponseEntity.status(HttpStatus.NO_CONTENT).body(bookService.delete(id))
 
     @PutMapping("/{id}")
-    fun updateBook(@PathVariable id: UUID, @RequestBody dto: BookUpdateRequestDto) =
+    fun updateBook(@PathVariable id: UUID, @RequestBody dto: BookUpdateRequestDto): ResponseEntity<Unit> =
         ResponseEntity.status(HttpStatus.NO_CONTENT).body(bookService.update(id, dto))
 }
