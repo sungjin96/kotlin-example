@@ -40,6 +40,6 @@ class BookApiController(private val bookService: BookService) {
         ResponseEntity.status(HttpStatus.NO_CONTENT).body(bookService.delete(id))
 
     @PutMapping("/{id}")
-    fun updateBook(@PathVariable id: UUID, @RequestBody dto: BookUpdateRequestDto): ResponseEntity<Unit> =
+    fun updateBook(@PathVariable id: UUID, @Valid @RequestBody dto: BookUpdateRequestDto): ResponseEntity<Unit> =
         ResponseEntity.status(HttpStatus.NO_CONTENT).body(bookService.update(id, dto))
 }
