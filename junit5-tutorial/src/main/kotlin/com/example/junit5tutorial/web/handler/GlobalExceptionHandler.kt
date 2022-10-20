@@ -1,5 +1,6 @@
 package com.example.junit5tutorial.web.handler
 
+import com.example.junit5tutorial.web.dto.CommonResponseDto
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.FieldError
@@ -23,13 +24,13 @@ class GlobalExceptionHandler {
 //    }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleApiException(e: MethodArgumentNotValidException): ResponseEntity<Map<String, String?>> {
+    fun handleApiException(e: MethodArgumentNotValidException): ResponseEntity<CommonResponseDto<Any>> {
         val errors: MutableMap<String, String?> = HashMap()
         e.bindingResult.allErrors.forEach(Consumer { error: ObjectError ->
             val fieldName = (error as FieldError).field
             val errorMessage = error.getDefaultMessage()
             errors[fieldName] = errorMessage
         })
-       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors)
+       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(CommonResponseDto(code = -1, msg = errors.toString()))
     }
 }

@@ -3,6 +3,7 @@ package com.example.junit5tutorial.service
 import com.example.junit5tutorial.domain.BookRepository
 import com.example.junit5tutorial.util.MailSender
 import com.example.junit5tutorial.web.dto.BookCreateRequestDto
+import com.example.junit5tutorial.web.dto.BookListResponseDto
 import com.example.junit5tutorial.web.dto.BookResponseDto
 import com.example.junit5tutorial.web.dto.BookUpdateRequestDto
 import org.springframework.stereotype.Service
@@ -23,8 +24,8 @@ class BookService(private val bookRepository: BookRepository, private val mailSe
         return BookResponseDto.from(newBook)
     }
 
-    fun findAll(): List<BookResponseDto> {
-        return bookRepository.findAll().map { BookResponseDto.from(it) }
+    fun findAll(): BookListResponseDto {
+        return BookListResponseDto(bookRepository.findAll().map { BookResponseDto.from(it) })
     }
 
     fun findById(id: UUID): BookResponseDto {

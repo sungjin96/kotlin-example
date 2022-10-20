@@ -20,8 +20,6 @@ import java.util.*
 @ExtendWith(MockitoExtension::class)
 internal class BookServiceTest {
 
-    lateinit var a: String
-
     @InjectMocks
     private lateinit var bookService: BookService
 
@@ -58,13 +56,13 @@ internal class BookServiceTest {
         Mockito.`when`(bookRepository.findAll()).thenReturn(books)
 
         // when
-        val findBooks = bookService.findAll()
+        val result = bookService.findAll()
 
         // then
-        assertThat("title").isEqualTo(findBooks[0].title)
-        assertThat("author").isEqualTo(findBooks[0].author)
-        assertThat("title2").isEqualTo(findBooks[1].title)
-        assertThat("author2").isEqualTo(findBooks[1].author)
+        assertThat("title").isEqualTo(result.books[0].title)
+        assertThat("author").isEqualTo(result.books[0].author)
+        assertThat("title2").isEqualTo(result.books[1].title)
+        assertThat("author2").isEqualTo(result.books[1].author)
 
     }
 

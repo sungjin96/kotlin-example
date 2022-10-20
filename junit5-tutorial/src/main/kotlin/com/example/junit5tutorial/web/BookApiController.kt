@@ -1,10 +1,7 @@
 package com.example.junit5tutorial.web
 
 import com.example.junit5tutorial.service.BookService
-import com.example.junit5tutorial.web.dto.BookCreateRequestDto
-import com.example.junit5tutorial.web.dto.BookResponseDto
-import com.example.junit5tutorial.web.dto.BookUpdateRequestDto
-import com.example.junit5tutorial.web.dto.CommonResponseDto
+import com.example.junit5tutorial.web.dto.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -21,19 +18,22 @@ class BookApiController(private val bookService: BookService) {
 
     @PostMapping
     fun saveBook(@Valid @RequestBody dto: BookCreateRequestDto): ResponseEntity<CommonResponseDto<BookResponseDto>> {
-        return ResponseEntity.status(HttpStatus.CREATED)
-            .body(
-                CommonResponseDto(code = 1, msg = "글 저장 성공", body = bookService.create(dto))
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                CommonResponseDto.success(msg = "글 저장 성공", body = bookService.create(dto))
             )
     }
 
     @GetMapping
-    fun getBookList(): ResponseEntity<List<BookResponseDto>> =
-        ResponseEntity.status(HttpStatus.OK).body(bookService.findAll())
+    fun getBooks(): ResponseEntity<CommonResponseDto<BookListResponseDto>> =
+        ResponseEntity.status(HttpStatus.OK).body(
+            CommonResponseDto.success(msg = "글 저장 성공", body = bookService.findAll())
+        )
 
     @GetMapping("/{id}")
-    fun getBook(@PathVariable id: UUID): ResponseEntity<BookResponseDto> =
-        ResponseEntity.status(HttpStatus.OK).body(bookService.findById(id))
+    fun getBook(@PathVariable id: UUID): ResponseEntity<CommonResponseDto<BookResponseDto>> =
+        ResponseEntity.status(HttpStatus.OK).body(
+            CommonResponseDto.success(msg = "글 저장 성공", body = bookService.findById(id))
+        )
 
     @DeleteMapping("/{id}")
     fun deleteBook(@PathVariable id: UUID): ResponseEntity<Unit> =
