@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 /**
  * Created by marathoner on 2022/08/29
  */
-@Component
+//@Component
 class MailSenderStub: MailSender {
     override fun send(): Boolean {
         return true

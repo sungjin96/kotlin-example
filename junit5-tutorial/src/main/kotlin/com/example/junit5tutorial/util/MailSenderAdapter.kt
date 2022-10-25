@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 /**
  * Created by marathoner on 2022/08/29
  */
-// @Component
+@Component
 class MailSenderAdapter(private val mail: Mail) : MailSender {
 
     override fun send(): Boolean {

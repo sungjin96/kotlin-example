@@ -22,9 +22,6 @@ import org.springframework.http.MediaType
 internal class BookApiControllerTest {
 
     @Autowired
-    private lateinit var bookServer: BookService
-
-    @Autowired
     private lateinit var rt: TestRestTemplate
 
     @Autowired
