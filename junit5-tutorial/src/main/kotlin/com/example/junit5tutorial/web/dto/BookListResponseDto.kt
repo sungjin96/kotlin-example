@@ -5,5 +5,4 @@ package com.example.junit5tutorial.web.dto
  */
 class BookListResponseDto(
     var books: List<BookResponseDto>
-) {
-}
+)

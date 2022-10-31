@@ -10,10 +10,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
-import org.springframework.http.MediaType
+import org.springframework.http.*
 
 /**
  * Created by marathoner on 2022/08/23
@@ -55,6 +52,28 @@ internal class BookApiControllerTest {
 
         assertThat(bookCreateRequestDto.title).isEqualTo(title)
         assertThat(bookCreateRequestDto.author).isEqualTo(author)
+    }
+
+    @Test
+    fun `책 목록보기`() {
+        // given
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
+        val httpEntity = HttpEntity(null, headers);
+
+        // when
+        val response = rt.exchange(
+            "/api/v1/book",
+            HttpMethod.GET,
+            httpEntity,
+            String::class.java
+        )
+
+        // then
+        val dc = JsonPath.parse(response.body)
+        val code = dc.read<Int>("$.code")
+
+        assertThat(1).isEqualTo(code)
 
     }
 }
